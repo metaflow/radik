@@ -1,6 +1,7 @@
 import math
 import os
 import re
+import sys
 
 import libs.common as common
 
@@ -19,12 +20,17 @@ def run_bitonic_select(BATCH: int, N: int, K: int) -> float:
 
     with os.popen(cmd, 'r') as fout:
         pattern = re.compile(r"^Bitonic TopK\s+averaged: (\S+) ms$")
+        found = False
         for line in fout:
             line = line.strip()
             m = re.match(pattern, line)
             if m:
                 avg_time = float(m.group(1))
+                found = True
                 break
+        if not found:
+            print(f"bitonic topk returned no result. Output: \n{fout}")
+            sys.exit(1)
 
     return avg_time * BATCH
 

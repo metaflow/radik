@@ -1,16 +1,16 @@
 # NVIDIA GPU SM version (Compute Capability)
 ARG SM_VERSION=75
 # Mirror PyPi repository
-ARG PIP_SOURCE_URL=https://mirrors.aliyun.com/pypi/simple/
+# ARG PIP_SOURCE_URL=https://mirrors.aliyun.com/pypi/simple/
 
 # ===========================
 # Build image
-FROM nvidia/cuda:11.6.2-devel-centos7 as build-image
+FROM nvidia/cuda:12.8.1-devel-ubuntu24.04 as build-image
 ARG SM_VERSION
 
-RUN yum clean all && yum makecache
-RUN yum install -y wget patch openssl-devel
-RUN yum install -y centos-release-scl && yum install -y devtoolset-10
+RUN apt update && apt upgrade
+RUN apt install -y wget patch openssl-devel
+RUN apt install -y centos-release-scl && yum install -y devtoolset-10
 
 WORKDIR /root/building
 
@@ -46,20 +46,21 @@ RUN cd radik && source /opt/rh/devtoolset-10/enable && make -j`nproc` all
 
 # ===========================
 # Release image
-FROM nvidia/cuda:11.6.2-runtime-centos7
-ARG PIP_SOURCE_URL
-
-RUN yum install -y python3 python3-pip
+FROM nvidia/cuda:12.8.1-runtime-ubuntu24.04
+#ARG PIP_SOURCE_URL
+RUN apt update && apt install -y python3 python3-pip
 
 # Copy built binaries
 COPY --from=build-image /radik /radik
 WORKDIR /radik
 
 # Install Python requirements
-ENV PIP_SOURCE ${PIP_SOURCE_URL}
-RUN python3 -m pip install pip -U -i $PIP_SOURCE
+#ENV PIP_SOURCE ${PIP_SOURCE_URL}
+# RUN python3 -m pip install pip -U # -i $PIP_SOURCE
+RUN python3 -m pip install pip -U
 COPY requirements.txt .
-RUN python3 -m pip install -r requirements.txt -i $PIP_SOURCE
+# RUN python3 -m pip install -r requirements.txt -i $PIP_SOURCE
+RUN python3 -m pip install -r requirements.txt
 
 # Evaluation scripts
 COPY eval eval

@@ -3,7 +3,7 @@ import os.path
 
 from enum import IntEnum
 
-BASE_DIR = os.path.abspath("/radik")
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.path.pardir, os.path.pardir))
 PLOT_DIR = os.path.join(BASE_DIR, "plot")
 BITONIC_BIN = os.path.join(BASE_DIR, "bitonic", "compareTopKAlgorithms")
 BLOCKSELECT_BIN = os.path.join(BASE_DIR, "blockselect", "test_block_select.out")

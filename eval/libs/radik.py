@@ -36,5 +36,7 @@ def run_radik(BATCH: int, N: int, K: int,
 
 
 if __name__ == '__main__':
-    t = run_radik(16, 18, 256)
-    print(t)
+    print(run_radik(112, 16, 8))
+    print(run_radik(112, 16, 16))
+    print(run_radik(112, 16, 32))
+    print(run_radik(112, 16, 64))

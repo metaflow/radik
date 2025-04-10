@@ -72,7 +72,7 @@ void profRadixSelectL(const int BATCHSIZE,
     for (int i = 0; i < BATCHSIZE; ++i) {
         TASKOFFSET[i + 1] = TASKLEN[i] + TASKOFFSET[i];
     }
-
+    std::cout << "totalLen:"  << TOTALLEN << std::endl;
     std::vector<ValType> valIn(TOTALLEN);
     std::vector<IdxType> idxIn(TOTALLEN);
     std::cout<<"batchSize: "<<BATCHSIZE<<", K: "<<K<<std::endl;
